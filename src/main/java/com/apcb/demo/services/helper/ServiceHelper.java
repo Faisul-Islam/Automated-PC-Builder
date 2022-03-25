@@ -14,7 +14,7 @@ public class ServiceHelper {
         if(brand.equals(CPUBrands.INTEL))
       return name.matches("(.*)[0-9]*(F|KF)(.*)");
         else
-            return name.matches("(.*)[0-9]*( |X)(.*)");
+            return name.matches("(.*)[0-9]*(  |X)(.*)");
     }
 
     public boolean regTest(String s){

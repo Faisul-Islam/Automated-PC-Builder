@@ -36,7 +36,7 @@ public class APCBService {
                 CPUInitialResponse tmp = new CPUInitialResponse();
 
                 tmp.setName(cpuNames.get(i).attr("title"));
-                tmp.setWithoutIGPU(helper.isCPUWithoutGPU(cpuNames.get(i).attr("title"), CPUBrands.INTEL));
+                tmp.setWithoutIGPU(helper.isCPUWithoutGPU(cpuNames.get(i).attr("title"), brand == "intel"? CPUBrands.INTEL : CPUBrands.AMD));
                 tmp.setPrice(Integer.parseInt(helper.extractInt(cpuPrices.get(i).text())));
 
                 output.add(tmp);
