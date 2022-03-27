@@ -11,10 +11,12 @@ public class ServiceHelper {
     }
 
     public boolean isCPUWithoutGPU(String name, Enum brand ){
-        if(brand.equals(CPUBrands.INTEL))
-      return name.matches("(.*)[0-9]*(F|KF)(.*)");
+
+        if(brand == CPUBrands.INTEL)
+            return name.matches("(.*)[0-9]*(F|KF)(.*)");
         else
-            return name.matches("(.*)[0-9]*(  |X)(.*)");
+            return name.matches("(.*)[0-9]*(Without|X)(.*)");
+
     }
 
     public boolean regTest(String s){

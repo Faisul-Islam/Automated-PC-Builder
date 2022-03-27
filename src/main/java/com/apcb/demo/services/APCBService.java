@@ -23,7 +23,7 @@ public class APCBService {
 
     public List<CPUInitialResponse> getCpuInfo(String brand,int price){
         int cpuAllowedPrice = helper.getCpuAllowedPrice(price);
-        System.out.println(cpuAllowedPrice);
+        System.out.println(brand == "intel");
         List<CPUInitialResponse> output = new ArrayList<>();
         try {
             Document doc = Jsoup.connect("https://www.ryanscomputers.com/category/processor-" + brand + "?page=1&limit=108&query=1-p%23"+ cpuAllowedPrice + "%7C&sort=HL").get();
@@ -36,7 +36,7 @@ public class APCBService {
                 CPUInitialResponse tmp = new CPUInitialResponse();
 
                 tmp.setName(cpuNames.get(i).attr("title"));
-                tmp.setWithoutIGPU(helper.isCPUWithoutGPU(cpuNames.get(i).attr("title"), brand == "intel"? CPUBrands.INTEL : CPUBrands.AMD));
+                tmp.setWithoutIGPU(helper.isCPUWithoutGPU(cpuNames.get(i).attr("title"), brand.equals("intel")? CPUBrands.INTEL : CPUBrands.AMD));
                 tmp.setPrice(Integer.parseInt(helper.extractInt(cpuPrices.get(i).text())));
 
                 output.add(tmp);
