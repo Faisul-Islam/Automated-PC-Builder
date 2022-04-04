@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CPUInitialResponse extends ProductInitialResponse {
-    boolean withoutIGPU;
+public class PCResponse {
+    private CPUInitialResponse cpu;
+    private MoboInitialResponse mobo;
 }
