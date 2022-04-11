@@ -16,7 +16,7 @@ public class APCBController {
         this.apcbService = apcbService;
     }
 
-    @CrossOrigin("https://auto-pc-builder.netlify.app")
+    @CrossOrigin(origins = {"https://auto-pc-builder.netlify.app", "http://localhost/"})
     @GetMapping(path ="/get/b={brand}&p={price}")
     public ResponseEntity<PCResponse> getCPUInfo(@PathVariable String brand, @PathVariable int price){
         return new ResponseEntity(apcbService.getPCInfo(brand,price), HttpStatus.OK);
