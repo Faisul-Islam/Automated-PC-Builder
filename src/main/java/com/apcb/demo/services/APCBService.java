@@ -58,7 +58,7 @@ public class APCBService {
                 output.add(tmp);
             }
             choosenCPU = helper.chooseCPU(output);
-
+            pcResponse.setCpu(choosenCPU);
 
             doc = Jsoup.connect(choosenCPU.getLink()).get();
 
@@ -66,21 +66,46 @@ public class APCBService {
             Getting the compatiable chipset nodes from the mobo page link
             So that can get the unique
              */
-            Elements motherBoardInfo = doc.getElementsMatchingOwnText("(Compatible Products)");
-            String motherBoardArch[] = motherBoardInfo.get(0).nextElementSibling().text().replace("Chipset:", "").split(",");
-//            System.out.println(MoboChipKey.amdMoboChipKey.get(motherBoardArch[0].trim()));
+//            Elements te = doc.getElementsMatchingOwnText("(Sockets Supported)");
+//            String tet = te.get(0).nextElementSibling().text();
+//            System.out.println(tet);
+
+
+            Elements motherBoardInfo ;
+            String motherBoardArch[];
+            try{
+                motherBoardInfo =  doc.getElementsMatchingOwnText("(Compatible Products)");
+                System.out.println(motherBoardInfo);
+                motherBoardArch = motherBoardInfo.get(0).nextElementSibling().text().replace("Chipset:", "").split(",");
+            }catch (Exception excp){
+// if unable to fing mobo info based on compatible products then search using sockests supported
+// & use that general mobo
+                motherBoardInfo = doc.getElementsMatchingOwnText("(Sockets Supported)");
+                motherBoardArch = motherBoardInfo.get(0).nextElementSibling().text().split(",");
+
+            }
+
 //            System.out.println(motherBoardArch[0].trim());
             String moboUniqueGetKeySubstring = MoboChipKey.amdMoboChipKey.get(motherBoardArch[0].trim());
+            System.out.println("test " + motherBoardArch[0]);
             int moboAllowedPrice = helper.getMoboAllowedPrice(price,choosenCPU.getPrice(),brandEnum);
               /*
              Getting all the
              */
+            System.out.println(moboAllowedPrice);
+            System.out.println(moboUniqueGetKeySubstring);
             doc = Jsoup.connect("https://www.ryanscomputers.com/category/desktop-component-motherboard?page=1&limit=18&query=1640-3866"+ moboUniqueGetKeySubstring +"%23dropdown%7C1-p%23"+ moboAllowedPrice+"%23dropdown%7C&sort=HL").get();
+
+
 
             Elements moboNames = doc.select(".product-box .product-title-grid");
             Elements moboPrices = doc.select(".product-box .special-price.special-price-grid");
             Elements moboLinks = doc.select(".product-box .product-title-grid");
             Elements moboImages = doc.select(".product-box .product-thumb a img");
+
+            Elements te = doc.getElementsMatchingOwnText("(Sockets Supported)");
+            String tet = te.get(0).nextElementSibling().text();
+            System.out.println(tet);
             List<MoboInitialResponse> mobos = new ArrayList<>();
 
 
@@ -100,7 +125,7 @@ public class APCBService {
             /*
              Finally, combing all individual response in the PcResponse
              */
-            pcResponse.setCpu(choosenCPU);
+
             pcResponse.setMobo(mobos.get(0));
 
 

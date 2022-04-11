@@ -1,6 +1,5 @@
 package com.apcb.demo.shared.constants;
 
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 
@@ -16,5 +15,7 @@ public final class MoboChipKey {
         amdMoboChipKey.put("TRX40", "%23dropdown%7C50-2917");
         amdMoboChipKey.put("B550", "%23dropdown%7C50-3095");
         amdMoboChipKey.put("A520", "%23dropdown%7C50-3253");
+//  socket
+        amdMoboChipKey.put("AM4", "%23dropdown%7C144-1274");
     }
 }
