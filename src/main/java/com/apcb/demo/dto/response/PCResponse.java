@@ -8,4 +8,5 @@ import lombok.Setter;
 public class PCResponse {
     private CPUInitialResponse cpu;
     private MoboInitialResponse mobo;
+    private ProductInitialResponse ram;
 }

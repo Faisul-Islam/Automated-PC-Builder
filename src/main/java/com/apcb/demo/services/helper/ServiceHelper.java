@@ -2,6 +2,8 @@ package com.apcb.demo.services.helper;
 
 import com.apcb.demo.dto.response.CPUInitialResponse;
 import com.apcb.demo.shared.constants.CPUBrands;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,6 +15,9 @@ public class ServiceHelper {
         if(isIntel(brand))
         return price * 30 / 100;
         else return price * 50/100;
+    }
+    public static int getRamAllowedPrice(int price){
+        return price * 15/100;
     }
 
     public static int getMoboAllowedPrice(int price, int cpuPrice, Enum brand){
@@ -48,16 +53,8 @@ public class ServiceHelper {
 
    public static String extractInt(String str)
     {
-        // Replacing every non-digit number
-        // with a space(" ")
         str = str.replaceAll("[^\\d]", "");
-
-        // Remove extra spaces from the beginning
-        // and the ending of the string
         str = str.trim();
-
-        // Replace all the consecutive white
-        // spaces with a single space
         str = str.replaceAll(" +", "");
 
         if (str.equals(""))
@@ -69,5 +66,25 @@ public class ServiceHelper {
    static boolean isIntel(Enum brand){
         if(brand.equals("intel")) return true;
         else return false;
+    }
+
+   public static String extractComponentInfo(Document doc, String regex){
+       String info = null;
+       Elements element = null;
+        try{
+            element =  doc.getElementsMatchingOwnText(regex);
+
+            info =  element.get(0).nextElementSibling().text();
+
+        }catch(NullPointerException npe){
+//            if there are more than one regex match
+//            then can give null pointer excpetion
+//            for index 0
+            info =  element.get(1).nextElementSibling().text();
+        }
+        catch (Exception e){
+            System.err.println(e);
+        }
+        return info;
     }
 }
