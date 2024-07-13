@@ -32,9 +32,7 @@ public class APCBService {
         int cpuAllowedPrice = helper.getCpuAllowedPrice(price, brandEnum);
         int ramAllowedPrice = helper.getRamAllowedPrice(price);
 
-
         CPUInitialResponse choosenCPU = new CPUInitialResponse();
-
 
         try {
             Document doc = Jsoup.connect("https://www.ryanscomputers.com/category/processor-" + brand + "?page=1&limit=108&query=1-p%23" + cpuAllowedPrice + "%7C&sort=HL").get();
@@ -67,10 +65,6 @@ public class APCBService {
             RamInitialResponse initialRamInfo = getInitialRamInfo(doc);
 
            rams = getProductResponseOf("https://www.ryanscomputers.com/category/desktop-component-desktop-ram?page=1&limit=108&query="+ RamQuerykeys.type.get(initialRamInfo.getType()) + RamQuerykeys.bus.get(initialRamInfo.getBus()) +"1-p%23" + ramAllowedPrice + "%7C&sort=HL");
-            System.out.println("toooooooooooooooo");
-//            for (ProductInitialResponse ram: rams) {
-//                System.err.println(ram.getName() + "Price :" + ram.getPrice());
-//            }
             ProductInitialResponse choosenRam = rams.get(0);
             pcResponse.setRam(choosenRam);
 
@@ -79,8 +73,6 @@ public class APCBService {
             So that can get the unique
              */
 
-
-            Elements motherBoardInfo;
             String motherBoardArch[];
             try {
                 motherBoardInfo = doc.getElementsMatchingOwnText("(Compatible Products)");
@@ -94,7 +86,6 @@ public class APCBService {
 
             }
 
-//            System.out.println(motherBoardArch[0].trim());
             String moboUniqueGetKeySubstring = MoboChipKey.amdMoboChipKey.get(motherBoardArch[0].trim());
             System.out.println("test " + motherBoardArch[0]);
             int moboAllowedPrice = helper.getMoboAllowedPrice(price, choosenCPU.getPrice(), brandEnum);
@@ -119,7 +110,6 @@ public class APCBService {
             System.out.println(tet);
             List<MoboInitialResponse> mobos = new ArrayList<>();
 
-
             for (short i = 0; i < moboNames.size(); i++) {
 
                 MoboInitialResponse tmp = new MoboInitialResponse();
@@ -131,12 +121,9 @@ public class APCBService {
                 mobos.add(tmp);
             }
             System.out.println(mobos.get(0));
-
-
             /*
              Finally, combing all individual response in the PcResponse
              */
-
             pcResponse.setMobo(mobos.get(0));
 
 
@@ -144,19 +131,16 @@ public class APCBService {
 
         }
         return pcResponse;
-        //   return output;
     }
 
 
     //helper
     private RamInitialResponse getInitialRamInfo(Document cpu) {
-        System.out.println("test----");
         String type = helper.extractComponentInfo(cpu, "(Memory Type)"),
                 bus = helper.extractComponentInfo(cpu, "(Bus Speed)"),
                 slots = helper.extractComponentInfo(cpu, "(Memory Slot|Memory Channel)");
 
         if (bus == null) {
-            System.out.println("yoyoyo");
             if (type.contains("MHz")) {
                 bus = helper.extractInt(type.split(" ")[1]);
                 type = type.split(" ")[0];
@@ -165,9 +149,6 @@ public class APCBService {
             //stripping of Mhz, Ghz of bus speed
             bus = helper.extractInt(bus);
         }
-        System.out.println("type: " + type);
-        System.out.println("bus: " + bus);
-        System.out.println("slots: " + slots);
         return new RamInitialResponse(type,bus,slots);
     }
 
@@ -183,7 +164,7 @@ public class APCBService {
             Elements images = doc.select(".product-box .product-thumb a img");
 
             for (short i = 0; i < names.size(); i++) {
- ProductInitialResponse model = new ProductInitialResponse();
+                ProductInitialResponse model = new ProductInitialResponse();
                 model.setName(names.get(i).attr("title"));
                 model.setPrice(Integer.parseInt(helper.extractInt(prices.get(i).text())));
                 model.setLink(links.get(i).attr("href"));
